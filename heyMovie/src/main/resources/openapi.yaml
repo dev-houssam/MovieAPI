@@ -1,0 +1,138 @@
+openapi: 3.0.3
+info:
+  title: API de Gestion des Films
+  description: |
+    API REST permettant la gestion des films dans le système.
+    Cette API permet de créer, lire, mettre à jour et supprimer des informations sur les films.
+  version: 1.0.0
+  contact:
+    name: Support API - Houssam BACAR
+    email: houssam.bacar@etudiant.univ-brest.fr
+
+servers:
+  - url: http://localhost:9001
+    description: Serveur de développement local
+
+tags:
+  - name: movies
+    description: Opérations liées à la gestion des films
+
+paths:
+  /movies:
+    get:
+      tags:
+        - movies
+      summary: Récupère tous les films
+      description: Retourne la liste complète des films enregistrés dans le système
+      operationId: getAllMovies
+      responses:
+        '200':
+          description: Liste des films récupérée avec succès
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieDto'
+        '500':
+          description: Erreur serveur interne
+
+    post:
+      tags:
+        - movies
+      summary: Crée un nouveau film
+      description: Ajoute un nouveau film dans le système
+      operationId: createMovie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovieDto'
+      responses:
+        '201':
+          description: Film créé avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieDto'
+        '400':
+          description: Données invalides
+        '500':
+          description: Erreur serveur interne
+
+  /movies/{id}:
+    get:
+      tags:
+        - movies
+      summary: Récupère un film par son ID
+      description: Retourne les détails d'un film spécifique
+      operationId: getMovieById
+      parameters:
+        - name: id
+          in: path
+          description: ID du film à récupérer
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Film trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieDto'
+        '404':
+          description: Film non trouvé
+        '500':
+          description: Erreur serveur interne
+
+    delete:
+      tags:
+        - movies
+      summary: Supprime un film
+      description: Supprime un film du système par son ID
+      operationId: deleteMovie
+      parameters:
+        - name: id
+          in: path
+          description: ID du film à supprimer
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Film supprimé avec succès
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: Film non trouvé
+        '500':
+          description: Erreur serveur interne
+
+components:
+  schemas:
+    MovieDto:
+      type: object
+      description: Représentation d'un film dans le système
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Identifiant unique du film
+          example: 1
+        name:
+          type: string
+          description: Nom du film
+          example: "One punch man"
+        genre:
+          type: string
+          description: Genre du film
+          example: "Oggy et les cafards"
+      required:
+        - name
+        - genre
