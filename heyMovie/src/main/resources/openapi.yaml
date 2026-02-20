@@ -10,7 +10,7 @@ info:
     email: houssam.bacar@etudiant.univ-brest.fr
 
 servers:
-  - url: http://localhost:9001
+  - url: http://localhost:12101
     description: Serveur de développement local
 
 tags:
@@ -22,7 +22,7 @@ paths:
     get:
       tags:
         - movies
-      summary: Récupère tous les films
+      summary: Récupère tous les films .
       description: Retourne la liste complète des films enregistrés dans le système
       operationId: getAllMovies
       responses:
