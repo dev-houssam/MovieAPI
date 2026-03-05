@@ -1,0 +1,77 @@
+{
+  "info": {
+    "name": "Movie API",
+    "_postman_id": "12345678-aaaa-bbbb-cccc-123456789000",
+    "description": "Tests API Movie",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+
+    {
+      "name": "Get all movies",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:12101/movies",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "12101",
+          "path": ["movies"]
+        }
+      }
+    },
+
+    {
+      "name": "Get movie by id",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "http://localhost:12101/movies/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "12101",
+          "path": ["movies","1"]
+        }
+      }
+    },
+
+    {
+      "name": "Create movie",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titre\": \"Inception\",\n  \"annee_realisation\": 2010,\n  \"prix_location\": 4.5,\n  \"age_minimum\": 12,\n  \"ouvert_location\": true,\n  \"genres\": [1,2]\n}"
+        },
+        "url": {
+          "raw": "http://localhost:12101/movies",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "12101",
+          "path": ["movies"]
+        }
+      }
+    },
+
+    {
+      "name": "Delete movie",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "http://localhost:12101/movies/1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "12101",
+          "path": ["movies","1"]
+        }
+      }
+    }
+
+  ]
+}

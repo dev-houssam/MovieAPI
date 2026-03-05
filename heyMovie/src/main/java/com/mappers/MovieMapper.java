@@ -1,61 +1,42 @@
 package com.mappers;
 
-import com.dtos.MovieDto;
 import com.entities.Movie;
-import org.springframework.stereotype.Component;
+import com.entities.Genre;
+import com.dtos.MovieDto;
 
-/**
- * Mapper responsable de la conversion entre les entités Movie et les DTOs MovieDto.
- * Un mapper permet de séparer la couche de persistance de la couche de présentation.
- *
- * Points clés du pattern Mapper :
- * - Conversion bidirectionnelle entre DTO et Entity
- * - Gestion des null-safety
- * - Pas de logique métier, uniquement de la transformation
- */
-@Component
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public class MovieMapper {
 
-    /**
-     * Convertit une entité Movie en DTO MovieDto
-     * Cette méthode est utilisée pour exposer les données aux clients de l'API
-     *
-     * @param movie l'entité à convertir
-     * @return le DTO correspondant ou null si l'entité est null
-     */
-    public MovieDto toDto(Movie movie) {
-        if (movie == null) {
-            return null;
-        }
+    public static MovieDto toDto(Movie movie){
 
-        MovieDto movieDto = new MovieDto();
-        movieDto.setId(movie.getId());
-        movieDto.setTitre(movie.getTitre());
-        movieDto.setGenre(movie.getGenre());
-        return movieDto;
+        return MovieDto.builder()
+                .id(movie.getId())
+                .titre(movie.getTitre())
+                .annee_realisation(movie.getAnneeRealisation())
+                .prix_location(movie.getPrixLocation())
+                .age_minimum(movie.getAgeMinimum())
+                .ouvert_location(movie.isOuvertLocation())
+                .genres(
+                        movie.getGenres()
+                                .stream()
+                                .map(Genre::getId)
+                                .collect(Collectors.toSet())
+                )
+                .build();
     }
 
-    /**
-     * Convertit un DTO MovieDto en entité Movie
-     * Cette méthode est utilisée pour persister les données reçues des clients
-     * Note: La date de naissance n'est pas dans le DTO mais est présente dans l'entité
-     *
-     * @param movieDto le DTO à convertir
-     * @return l'entité correspondante ou null si le DTO est null
-     */
-    public Movie toEntity(MovieDto movieDto) {
-        if (movieDto == null) {
-            return null;
-        }
+    public static Movie toEntity(MovieDto dto, Set<Genre> genres){
 
-        Movie movie = new Movie();
-        // On ne set l'ID que s'il existe (cas d'une mise à jour)
-        if (movieDto.getId() != null) {
-            movie.setId(movieDto.getId());
-        }
-        // Il faut faire les autres !!! imperativement ! fait vite fait !
-        movie.setTitre(movieDto.getTitre());
-        movie.setGenre(movieDto.getGenre());
-        return movie;
+        return Movie.builder()
+                // NE PAS mapper l'id pour une création : une grosse erreur apparait au POST
+                .titre(dto.getTitre())
+                .anneeRealisation(dto.getAnnee_realisation())
+                .prixLocation(dto.getPrix_location())
+                .ageMinimum(dto.getAge_minimum())
+                .ouvertLocation(dto.isOuvert_location())
+                .genres(genres)
+                .build();
     }
-} 
+}

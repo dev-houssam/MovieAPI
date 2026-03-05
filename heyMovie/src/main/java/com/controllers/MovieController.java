@@ -1,9 +1,9 @@
 package com.controllers;
 
+import com.services.MovieService;
 import com.dtos.MovieDto;
-import org.springframework.web.bind.annotation.*;
 
-import com.services.impl.MovieServiceImpl;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -11,43 +11,39 @@ import java.util.List;
 @RequestMapping("/movies")
 public class MovieController {
 
-	private final MovieServiceImpl movieService;
+	private final MovieService service;
 
-	public MovieController(MovieServiceImpl movieService) {
-		this.movieService = movieService;
+	public MovieController(MovieService service){
+		this.service = service;
 	}
 
-	/**
-	 * <p>Get all movies in the system</p>
-	 * @return List<MovieDto>
-	 */
 	@GetMapping
-	public List<MovieDto> getMovies() {
-		return movieService.getAllMovies();
+	public List<MovieDto> getAllMovies(){
+		return service.getAllMovies();
 	}
 
-	/**
-	 * Method to get the movie based on the ID
-	 */
 	@GetMapping("/{id}")
 	public MovieDto getMovie(@PathVariable Long id){
-		return movieService.getMovieById(id);
+		return service.getMovie(id);
 	}
 
-	/**
-	 * Create a new Movie in the system
-	 */
 	@PostMapping
-	public MovieDto saveMovie(final @RequestBody MovieDto movieDto){
-		return movieService.saveMovie(movieDto);
+	public MovieDto createMovie(@RequestBody MovieDto dto){
+		return service.createMovie(dto);
 	}
 
-	/**
-	 * Delete a movie by it's id
-	 */
 	@DeleteMapping("/{id}")
-	public Boolean deleteMovie(@PathVariable Long id){
-		return movieService.deleteMovie(id);
+	public void deleteMovie(@PathVariable Long id){
+		service.deleteMovie(id);
 	}
 
+	@PutMapping("/{id}/open-location")
+	public MovieDto openLocation(@PathVariable Long id){
+		return service.openLocation(id);
+	}
+
+	@PutMapping("/{id}/close-location")
+	public MovieDto closeLocation(@PathVariable Long id){
+		return service.closeLocation(id);
+	}
 }

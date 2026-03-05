@@ -1,26 +1,45 @@
 package com.entities;
 
-import java.time.LocalDate;
+import jakarta.persistence.*;
+import lombok.*;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-import lombok.Data;
+import java.util.Set;
 
 @Entity
+@Table(name = "movie")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Movie {
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@Column(unique = true, nullable = false)
 	private String titre;
-	private String genre;
-	private String anneeRealisation;
-	private Long prixLocation;
-	private Long ageMinimum;
-	private Long Promo;
-	private LocalDate simpleDate;
-	
+
+	@Column(name = "annee_realisation")
+	private int anneeRealisation;
+
+	@Column(name = "prix_location")
+	private double prixLocation;
+
+	@Column(name = "age_minimum")
+	private int ageMinimum;
+
+	@Column(name = "ouvert_location")
+	private boolean ouvertLocation;
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "movies_genres",
+			joinColumns = @JoinColumn(name = "movie_id"),
+			inverseJoinColumns = @JoinColumn(name = "genre_id")
+	)
+	@ToString.Exclude
+	@EqualsAndHashCode.Exclude
+	private Set<Genre> genres;
+
 }

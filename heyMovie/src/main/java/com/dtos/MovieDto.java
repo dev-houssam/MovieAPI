@@ -1,19 +1,32 @@
 package com.dtos;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.*;
+
+import java.util.List;
+import java.util.Set;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class MovieDto {
-	
-	@NotNull
+
 	private Long id;
-	
-	@NotBlank(message = "Le titre est obligatoire")
+
 	private String titre;
-	
-	@NotBlank(message = "La genre est obligatoire")
-	private String genre;
-	
+
+	private int annee_realisation;
+
+	private double prix_location;
+
+	private int age_minimum;
+
+	private boolean ouvert_location;
+
+	private Set<Long> genres;
+
+	private byte[] poster;
+
+	private List<ArtistDto> artists;
+
 }
