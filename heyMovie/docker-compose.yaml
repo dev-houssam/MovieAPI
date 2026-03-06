@@ -1,16 +1,21 @@
 services:
+
   mariadb:
-    image: mariadb:latest
+    image: mariadb:11
     container_name: mariadb
     environment:
-      MARIADB_ROOT_PASSWORD: monMotDePasseSuperSecret
-      MARIADB_DATABASE: test
-    volumes:
-      - ./data:/var/lib/mysql
+      MARIADB_ROOT_PASSWORD: pass2projet2SI
+      MARIADB_DATABASE: e22010141_db2
     ports:
       - "3306:3306"
-    healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+
+  movie-api:
+    image: gitlab-depinfo.univ-brest.fr:5050/e22010141/apis/movie-api:v1
+    ports:
+      - "10010:8080"
+    environment:
+      spring.datasource.url: jdbc:mysql://mariadb:3306/e22010141_db2
+      spring.datasource.username: root
+      spring.datasource.password: pass2projet2SI
+    depends_on:
+      - mariadb
