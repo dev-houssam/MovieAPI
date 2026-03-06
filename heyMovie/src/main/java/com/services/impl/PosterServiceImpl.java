@@ -2,26 +2,33 @@ package com.services.impl;
 
 import com.services.external.PosterService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClientException;
 
 @Service
 @RequiredArgsConstructor
-//probleme : Class 'PosterServiceImpl' is public, should be declared in a file named 'PosterServiceImpl.java'
 public class PosterServiceImpl implements PosterService {
 
     private final RestTemplate restTemplate;
 
     private final String POSTER_API_URL =
-            "http://localhost:12100/posters/";
+            "http://localhost:12005/posters/";
 
     @Override
     public byte[] getPoster(String movieTitle) {
 
         String url = POSTER_API_URL + movieTitle;
 
-        return restTemplate.getForObject(url, byte[].class);
+        try {
+            return restTemplate.getForObject(url, byte[].class);
+        }
+        catch (RestClientException e) {
+
+            System.out.println("Poster API indisponible pour : " + movieTitle);
+
+            return null; // pas de poster mais le film reste chargé
+        }
     }
 
     @Override
@@ -29,6 +36,12 @@ public class PosterServiceImpl implements PosterService {
 
         String url = POSTER_API_URL + movieTitle;
 
-        restTemplate.postForObject(url, poster, Void.class);
+        try {
+            restTemplate.postForObject(url, poster, Void.class);
+        }
+        catch (RestClientException e) {
+
+            System.out.println("Impossible d'uploader le poster : " + movieTitle);
+        }
     }
 }

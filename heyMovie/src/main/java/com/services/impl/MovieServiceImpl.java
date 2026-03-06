@@ -37,10 +37,20 @@ public class MovieServiceImpl implements MovieService {
 	private final PosterService posterService;
 	private final ArtistService artistService;
 
+	/*
 	@Override
 	public List<MovieDto> getAllMovies() {
 
 		return movieRepository.findAll()
+				.stream()
+				.map(MovieMapper::toDto)
+				.collect(Collectors.toList());
+	}*/
+
+	@Override
+	public List<MovieDto> getAllMovies() {
+
+		return movieRepository.findAllWithGenres()
 				.stream()
 				.map(MovieMapper::toDto)
 				.collect(Collectors.toList());
@@ -69,7 +79,6 @@ public class MovieServiceImpl implements MovieService {
 
 	@Override
 	public MovieDto createMovie(MovieDto dto){
-
 		Set<Genre> genres = new HashSet<>(
 				genreRepository.findAllById(dto.getGenres())
 		);
